@@ -1,0 +1,19 @@
+.bg-dark-profile {
+  background-color: #12002b;
+  padding-top: 0.1rem;
+  padding-bottom: 8rem;
+}
+
+.profile-links {
+  display: flex;
+  gap: 0.3rem;
+}
+
+.last-account {
+  margin-bottom: 6.1rem;
+}
+
+.edit-button a {
+  color: #fff;
+  text-decoration: none;
+}

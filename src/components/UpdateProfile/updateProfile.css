@@ -1,0 +1,53 @@
+.bg-dark-profile {
+  background-color: #12002b;
+  padding-top: 0.1rem;
+  padding-bottom: 4rem;
+}
+
+.profile-links {
+  display: flex;
+  gap: 0.3rem;
+}
+
+.update-form {
+  box-sizing: border-box;
+  width: 300px;
+  margin: 0 auto;
+  margin-top: 0rem;
+  padding: 1rem;
+}
+
+.input-fields {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.7rem;
+}
+
+.input-wrapper-update input {
+  padding: 0.7rem;
+  width: 170px;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.buttons-wrapper {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.buttons-wrapper button {
+  width: 100px;
+}
+
+.buttons-wrapper button a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.last-account-2 {
+  margin-bottom: 3rem;
+}
