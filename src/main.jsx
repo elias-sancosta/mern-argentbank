@@ -1,3 +1,4 @@
+// Importation des modules nécessaires
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App.jsx';
@@ -17,6 +18,7 @@ import PrivateRoute from './routes/PrivateRoute.jsx';
 import store from './store';
 import { Provider } from 'react-redux';
 
+// Création du routeur
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
@@ -31,7 +33,9 @@ const router = createBrowserRouter(
   )
 );
 
+// Rendu de l'application dans l'élément root du DOM
 ReactDOM.createRoot(document.getElementById('root')).render(
+  // Utilisation de Redux pour la gestion de l'état global
   <Provider store={store}>
     <React.StrictMode>
       <RouterProvider router={router} />

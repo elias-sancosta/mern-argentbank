@@ -1,21 +1,28 @@
-import './updateProfile.css';
+import './updateProfile.css'; // Importe la feuille de style CSS associée au composant
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { useUpdateUserMutation } from '../../slices/usersApiSlice';
-import { setCredentials } from '../../slices/authSlice';
+import { useUpdateUserMutation } from '../../slices/usersApiSlice'; // Importe le hook de mutation de l'API utilisateur
+import { setCredentials } from '../../slices/authSlice'; // Importe l'action de mise à jour des informations d'authentification
 import { useState, useEffect } from 'react';
 
+/**
+ * Composant pour la mise à jour du profil utilisateur.
+ * Permet à l'utilisateur de mettre à jour son prénom et son nom de famille.
+ * @returns {JSX.Element} Élément JSX représentant le composant de mise à jour du profil utilisateur.
+ */
 function Profile() {
+  // Initialise les variables d'états
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
 
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const dispatch = useDispatch(); // Initialise le gestionnaire de dispatch Redux
+  const navigate = useNavigate(); // Initialise le navigateur React Router
 
-  const [updateProfile] = useUpdateUserMutation();
+  const [updateProfile] = useUpdateUserMutation(); // Utilise le hook de mutation de l'API pour l'actualisation du profil utilisateur
 
-  const { userInfo } = useSelector((state) => state.auth);
+  const { userInfo } = useSelector((state) => state.auth); // Sélectionne les informations d'utilisateur depuis le store Redux
 
+  // Remplit les champs du formulaire avec les données actuelles de l'utilisateur lors de son chargement
   useEffect(() => {
     setFirstName(userInfo.firstName);
     setLastName(userInfo.lastName);
@@ -25,6 +32,7 @@ function Profile() {
     e.preventDefault();
 
     try {
+      // Met à jour le profil utilisateur avec les nouvelles données
       const res = await updateProfile({
         _id: userInfo._id,
         firstName,
@@ -45,6 +53,7 @@ function Profile() {
           <h1>Welcome back</h1>
           <form className="update-form">
             <div className="input-fields">
+              {/* Champ pour le prénom */}
               <div className="input-wrapper-update">
                 <input
                   type="text"
@@ -54,7 +63,7 @@ function Profile() {
                   onChange={(e) => setFirstName(e.target.value)}
                 />
               </div>
-
+              {/* Champ pour le nom de famille */}
               <div className="input-wrapper-update">
                 <input
                   type="text"
@@ -66,9 +75,11 @@ function Profile() {
               </div>
             </div>
             <div className="buttons-wrapper">
+              {/* Bouton pour enregistrer les modifications */}
               <button onClick={submitHandler} className="edit-button">
                 Save
               </button>
+              {/* Bouton pour annuler et retourner au profil */}
               <button className="edit-button">
                 <Link to="/profile">Cancel</Link>
               </button>
