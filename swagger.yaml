@@ -1,9 +1,9 @@
-swagger: "2.0"
+swagger: '2.0'
 info:
   title: Bank Argent API documentation
   description: Contains all available API endpoints in this codebase
-  version: "1.0.0"
-  termsOfService: "http://swagger.io/terms/"
+  version: '1.0.0'
+  termsOfService: 'http://swagger.io/terms/'
 host: localhost:3001
 basePath: /api/v1
 schemes:
@@ -21,17 +21,17 @@ paths:
           description: Login Payload
           required: true
           schema:
-            $ref: "#/definitions/Login"
+            $ref: '#/definitions/Login'
       produces:
         - application/json
       responses:
-        "200":
+        '200':
           description: Login Successfully
           schema:
-            $ref: "#/definitions/LoginResponse"
-        "400":
+            $ref: '#/definitions/LoginResponse'
+        '400':
           description: Invalid Fields
-        "500":
+        '500':
           description: Internal Server Error
   /user/signup:
     post:
@@ -45,17 +45,17 @@ paths:
           description: Signup Payload
           required: true
           schema:
-            $ref: "#/definitions/User"
+            $ref: '#/definitions/User'
       produces:
         - application/json
       responses:
-        "200":
+        '200':
           description: Signup Successfully
           schema:
-            $ref: "#/definitions/ApiResponse"
-        "400":
+            $ref: '#/definitions/ApiResponse'
+        '400':
           description: Invalid Fields
-        "500":
+        '500':
           description: Internal Server Error
   /user/profile:
     post:
@@ -69,18 +69,18 @@ paths:
         - in: header
           name: Authorization
           description: Attach Bearer JWT token
-          required: true
           type: string
+          required: true
       produces:
         - application/json
       responses:
-        "200":
+        '200':
           description: User profile retrieved successully
           schema:
-            $ref: "#/definitions/ApiResponse"
-        "400":
+            $ref: '#/definitions/ApiResponse'
+        '400':
           description: Invalid Fields
-        "500":
+        '500':
           description: Internal Server Error
     put:
       security:
@@ -93,154 +93,162 @@ paths:
         - in: header
           name: Authorization
           description: Attach Bearer JWT token
-          required: true
           type: string
+          required: true
         - in: body
           name: body
           description: Update user profile attributes
           required: true
           schema:
-            $ref: "#/definitions/UserProfile"
+            $ref: '#/definitions/UserProfile'
       produces:
         - application/json
       responses:
-        "200":
+        '200':
           description: User profile retrieved successully
           schema:
-            $ref: "#/definitions/ApiResponse"
-        "400":
+            $ref: '#/definitions/ApiResponse'
+        '400':
           description: Invalid Fields
-        "500":
+        '500':
           description: Internal Server Error
-  /user/accounts:
-    post:
-      security:
-        - Bearer: []
-      tags:
-        - User Module
-      summary: User Accounts API
-      description: API for fetching user accounts
-      parameters:
-        - in: header
-          name: Authorization
-          description: Attach Bearer JWT token
-          required: true
-          type: string
-        - in: body
-          name: body
-          description: Attach transaction ID
-          required: true
-          schema:
-            $ref: "#/definitions/UserId"
-      produces:
-        - application/json
-      responses:
-        "200":
-          description: User accounts retrieved successully
-          schema:
-            $ref: "#/definitions/Accounts"
-        "400":
-          description: Invalid Fields
-        "500":
-          description: Internal Server
-
-  /user/transactions:
-    post:
-      security:
-        - Bearer: []
-      tags:
-        - User Module
-      summary: User transactions API
-      description: API for fetching user transactions
-      parameters:
-        - in: header
-          name: Authorization
-          description: Attach Bearer JWT token
-          required: true
-          type: string
-        - in: body
-          name: body
-          description: Attach transaction ID
-          required: true
-          schema:
-            $ref: "#/definitions/AccountId"
-      produces:
-        - application/json
-      responses:
-        "200":
-          description: User transactions retrieved successully
-          schema:
-            $ref: "#/definitions/Transactions"
-        "400":
-          description: Invalid Fields
-        "500":
-          description: Internal Server
-  /user/transactions/{id}:
+  /transactions:
     get:
-      security:
-        - Bearer: []
       tags:
-        - User Module
-      summary: Transaction details API
-      description: API for fetching a single user transaction
+        - User Transaction
+      summary: Get all transactions for the current month
+      description: Returns a list of all transactions for the current month for the authenticated user
       parameters:
-        - in: path
-          name: id
-          description: The transaction ID
-          required: true
-          type: integer
         - in: header
           name: Authorization
           description: Attach Bearer JWT token
-          required: true
           type: string
-      produces:
-        - application/json
-      responses:
-        "200":
-          description: User transaction retrieved successully
-          schema:
-            $ref: "#/definitions/Transaction"
-        "400":
-          description: Invalid Fields
-        "500":
-          description: Internal Server Error
-    patch:
-      security:
-        - Bearer: []
-      tags:
-        - User Module
-      summary: Transaction details API
-      description: API to update, add or delete notes and category of a single transaction
-      parameters:
-        - in: path
-          name: id
-          description: The transaction ID
           required: true
-          type: integer
+        - name: month
+          in: query
+          description: Month to get transactions for in the format YYYY-MM
+          required: false
+          type: string
+          format: date
+      responses:
+        '200':
+          description: List of transactions for the current month
+          schema:
+            $ref: '#/definitions/Transactions'
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server Error
+    post:
+      tags:
+        - User Transaction
+      summary: Add a new transaction
+      description: Adds a new transaction for the authenticated user
+      parameters:
         - in: header
           name: Authorization
           description: Attach Bearer JWT token
+          type: string
+          required: true
+        - name: transaction
+          in: body
+          description: Transaction object to add
+          required: true
+          schema:
+            $ref: '#/definitions/TransactionInput'
+      responses:
+        201:
+          description: New transaction added successfully
+          schema:
+            $ref: '#/definitions/Transactions'
+        400:
+          description: BadRequest
+        401:
+          description: Unauthorized
+        500:
+          description: ServerError
+  /transactions/{id}:
+    get:
+      tags:
+        - User Transaction
+      summary: Get details of a transaction
+      description: Returns the details of a transaction for the authenticated user
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          type: string
+          required: true
+        - name: id
+          in: path
+          description: ID of the transaction to get
           required: true
           type: string
-        - in: body
-          name: body
-          description: Attach transaction details
+      responses:
+        200:
+          description: Details of the requested transaction
+          schema:
+            $ref: '#/definitions/Transactions'
+        401:
+          description: Unauthorized
+        404:
+          description: NotFound
+        500:
+          description: ServerError
+    put:
+      tags:
+        - User Transaction
+      summary: Update a transaction
+      description: Updates a transaction for the authenticated user
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          type: string
+          required: true
+        - name: id
+          in: path
+          description: ID of the transaction to update
+          required: true
+          type: string
+        - name: transaction
+          in: body
+          description: Transaction object to update
           required: true
           schema:
-            $ref: "#/definitions/TransactionDetails"
-      produces:
-        - application/json
+            $ref: '#/definitions/TransactionInput'
       responses:
-        "204":
-          description: User transaction retrieved successully
+        200:
+          description: Transaction updated successfully
           schema:
-            $ref: "#/definitions/TransactionId"
-        "400":
-          description: Invalid Fields
-        "500":
-          description: Internal Server Error
-
+            $ref: '#/definitions/Transactions'
+        400:
+          description: BadRequest
+        401:
+          description: Unauthorized
+        404:
+          description: NotFound
+        500:
+          description: ServerError
+    delete:
+      tags:
+        - User Transaction
+      summary: Delete a transaction
+      description: Deletes a transaction for the authenticated user
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          type: string
+          required: true
+        - name: id
+          in: path
+          description: ID of the transaction to delete
+          required: true
+          type: string
+      responses:
+        204:
+          description: Transaction deleted
 securityDefinitions:
   Bearer:
     type: apiKey
@@ -295,68 +303,21 @@ definitions:
         type: string
       lastName:
         type: string
-  UserId:
-    type: object
-    properties:
-      id:
-        type: string
-  Accounts:
-    type: object
-    properties:
-      accountId:
-        type: number
-      accountTitle:
-        type: string
-      accountBalance:
-        type: number
-      accountDescription:
-        type: string
-  AccountId:
-    type: object
-    properties:
-      accountId:
-        type: number
   Transactions:
     type: object
     properties:
-      transactionId:
-        type: number
-      transactionDate:
+      date:
         type: string
-      transactionDescription:
+      description:
         type: string
-      transactionAmount:
-        type: number
-      transactionBalance:
-        type: number
-  TransactionId:
+      amount:
+        type: string
+      balance:
+        type: string
+  TransactionInput:
     type: object
     properties:
-      transactionId:
-        type: number
-  Transaction:
-    type: object
-    properties:
-      transactionId:
-        type: number
-      transactionDate:
+      category:
         type: string
-      transactionDescription:
-        type: string
-      transactionAmount:
-        type: number
-      transactionBalance:
-        type: number
-      transactionType:
-        type: string
-      transactionCategory:
-        type: string
-      transactionNotes:
-        type: string
-  TransactionDetails:
-    type: object
-    properties:
-      transactionCategory:
-        type: string
-      transactionNotes:
+      note:
         type: string

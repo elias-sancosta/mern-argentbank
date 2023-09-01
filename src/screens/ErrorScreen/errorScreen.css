@@ -1,0 +1,10 @@
+.error {
+  padding-top: 12rem;
+  padding-bottom: 30.3rem;
+  color: #c8d7d9;
+}
+
+.error a {
+  text-decoration: none;
+  color: #a2b8bb;
+}
